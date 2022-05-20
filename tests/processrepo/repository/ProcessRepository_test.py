@@ -19,12 +19,22 @@ class ProcessRepositoryTestCase(unittest.TestCase):
 
     def tearDown(self):
         self.cache.delete('test:process:status:conductor')
+        self.cache.delete('test:process:status:a')
+        self.cache.delete('test:process:status:b')
 
     def test_should_store_and_retrieve_process(self):
         process = Process('conductor', 1, ProcessStatus.RUNNING)
         self.repository.store(process)
         stored_process = self.repository.retrieve(process.name)
         self.assertEqual(process, stored_process)
+
+    def test_should_store_multiple_processes_and_retrieve_all(self):
+        process_a = Process('a', 1, ProcessStatus.RUNNING)
+        process_b = Process('b', 1, ProcessStatus.RUNNING)
+        self.repository.store(process_a)
+        self.repository.store(process_b)
+        stored_processes = self.repository.retrieve_all()
+        self.assertEqual([process_a, process_b], stored_processes)
 
 
 if __name__ == '__main__':

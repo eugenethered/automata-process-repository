@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from cache.holder.RedisCacheHolder import RedisCacheHolder
 from core.options.exception.MissingOptionError import MissingOptionError
@@ -38,5 +39,13 @@ class ProcessRepository:
 
     def retrieve(self, process_name) -> Process:
         key = self.build_process_key(process_name)
+        return self.__retrieve(key)
+
+    def __retrieve(self, key):
         raw_entity = self.cache.fetch(key, as_type=dict)
         return deserialize_process(raw_entity)
+
+    def retrieve_all(self) -> List[Process]:
+        all_process_keys = self.process_key.format('*')
+        keys = self.cache.get_keys(all_process_keys)
+        return list([self.__retrieve(pk) for pk in keys])
