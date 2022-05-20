@@ -12,7 +12,7 @@ class ProcessRepositoryTestCase(unittest.TestCase):
         options = {
             'REDIS_SERVER_ADDRESS': '192.168.1.90',
             'REDIS_SERVER_PORT': 6379,
-            'PROCESS_KEY': 'test:process:status:{}'
+            'PROCESS_KEY': '{}:process:status:{}'
         }
         self.cache = RedisCacheHolder(options)
         self.repository = ProcessRepository(options)
@@ -23,17 +23,17 @@ class ProcessRepositoryTestCase(unittest.TestCase):
         self.cache.delete('test:process:status:b')
 
     def test_should_store_and_retrieve_process(self):
-        process = Process('conductor', 1, ProcessStatus.RUNNING)
+        process = Process('test', 'conductor', 1, ProcessStatus.RUNNING)
         self.repository.store(process)
-        stored_process = self.repository.retrieve(process.name)
+        stored_process = self.repository.retrieve(process.market, process.name)
         self.assertEqual(process, stored_process)
 
     def test_should_store_multiple_processes_and_retrieve_all(self):
-        process_a = Process('a', 1, ProcessStatus.RUNNING)
-        process_b = Process('b', 1, ProcessStatus.RUNNING)
+        process_a = Process('test', 'a', 1, ProcessStatus.RUNNING)
+        process_b = Process('test', 'b', 1, ProcessStatus.RUNNING)
         self.repository.store(process_a)
         self.repository.store(process_b)
-        stored_processes = self.repository.retrieve_all()
+        stored_processes = self.repository.retrieve_all('test')
         self.assertEqual([process_a, process_b], stored_processes)
 
 

@@ -16,6 +16,7 @@ class ProcessStatus(Enum):
 
 @dataclass
 class Process:
+    market: str
     name: str
     instant: int
     status: ProcessStatus = field(default=ProcessStatus.UNKNOWN)

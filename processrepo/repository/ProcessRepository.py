@@ -28,24 +28,23 @@ class ProcessRepository:
             self.log.warning(f'missing option please provide option {PROCESS_KEY}')
             raise MissingOptionError(f'missing option please provide option {PROCESS_KEY}')
 
-    # key -> test:process:status:{}
-    def build_process_key(self, process_name):
-        return self.process_key.format(process_name)
+    def build_process_key(self, market, process_name):
+        return self.process_key.format(market, process_name)
 
     def store(self, process: Process):
-        key = self.build_process_key(process.name)
+        key = self.build_process_key(process.market, process.name)
         serialized = serialize_process(process)
         self.cache.store(key, serialized)
 
-    def retrieve(self, process_name) -> Process:
-        key = self.build_process_key(process_name)
+    def retrieve(self, market, process_name) -> Process:
+        key = self.build_process_key(market, process_name)
         return self.__retrieve(key)
 
     def __retrieve(self, key):
         raw_entity = self.cache.fetch(key, as_type=dict)
         return deserialize_process(raw_entity)
 
-    def retrieve_all(self) -> List[Process]:
-        all_process_keys = self.process_key.format('*')
+    def retrieve_all(self, market) -> List[Process]:
+        all_process_keys = self.process_key.format(market, '*')
         keys = self.cache.get_keys(all_process_keys)
         return list([self.__retrieve(pk) for pk in keys])
