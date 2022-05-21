@@ -3,10 +3,11 @@ from enum import Enum
 
 
 class ProcessStatus(Enum):
-    UNKNOWN = 'unknown'
+    INITIALIZED = 'initialized'
     RUNNING = 'running'
     ERROR = 'error'
     STOPPED = 'stopped'
+    UNKNOWN = 'unknown'
 
     @staticmethod
     def parse(value):
