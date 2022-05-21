@@ -20,4 +20,5 @@ class Process:
     market: str
     name: str
     instant: int
+    run_profile: str
     status: ProcessStatus = field(default=ProcessStatus.UNKNOWN)
