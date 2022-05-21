@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
+from processrepo.ProcessRunProfile import RunProfile
+
 
 class ProcessStatus(Enum):
     INITIALIZED = 'initialized'
@@ -20,5 +22,5 @@ class Process:
     market: str
     name: str
     instant: int
-    run_profile: str
+    run_profile: RunProfile = field(default=RunProfile.ASAP)
     status: ProcessStatus = field(default=ProcessStatus.UNKNOWN)

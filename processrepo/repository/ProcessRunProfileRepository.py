@@ -1,10 +1,9 @@
 import logging
-from typing import List
 
 from cache.holder.RedisCacheHolder import RedisCacheHolder
 from core.options.exception.MissingOptionError import MissingOptionError
 
-from processrepo.ProcessRunProfile import ProcessRunProfile
+from processrepo.ProcessRunProfile import ProcessRunProfile, RunProfile
 
 PROCESS_RUN_PROFILE_KEY = 'PROCESS_RUN_PROFILE_KEY'
 
@@ -31,9 +30,9 @@ class ProcessRunProfileRepository:
 
     def store(self, process_run_profile: ProcessRunProfile):
         key = self.build_process_run_profile_key(process_run_profile.name, process_run_profile.market)
-        self.cache.store(key, process_run_profile.run_profile)
+        self.cache.store(key, process_run_profile.run_profile.value)
 
     def retrieve(self, process_name, market) -> ProcessRunProfile:
         key = self.build_process_run_profile_key(process_name, market)
-        run_profile = self.cache.fetch(key)
-        return ProcessRunProfile(market, process_name, run_profile)
+        raw_run_profile = self.cache.fetch(key)
+        return ProcessRunProfile(market, process_name, RunProfile.parse(raw_run_profile))

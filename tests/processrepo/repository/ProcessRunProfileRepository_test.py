@@ -2,7 +2,7 @@ import unittest
 
 from cache.holder.RedisCacheHolder import RedisCacheHolder
 
-from processrepo.ProcessRunProfile import ProcessRunProfile
+from processrepo.ProcessRunProfile import ProcessRunProfile, RunProfile
 from processrepo.repository.ProcessRunProfileRepository import ProcessRunProfileRepository
 
 
@@ -21,7 +21,7 @@ class ProcessRunProfileRepositoryTestCase(unittest.TestCase):
         self.cache.delete('test:process:run-profile:conductor')
 
     def test_should_store_and_retrieve_process_run_profile(self):
-        process_run_profile = ProcessRunProfile('test', 'conductor', 'minute')
+        process_run_profile = ProcessRunProfile('test', 'conductor', RunProfile.MINUTE)
         self.repository.store(process_run_profile)
         stored_process_run_profile = self.repository.retrieve('conductor', 'test')
         self.assertEqual(process_run_profile, stored_process_run_profile)
