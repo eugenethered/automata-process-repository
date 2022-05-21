@@ -25,7 +25,7 @@ class ProcessRepositoryTestCase(unittest.TestCase):
     def test_should_store_and_retrieve_process(self):
         process = Process('test', 'conductor', 1, ProcessStatus.RUNNING)
         self.repository.store(process)
-        stored_process = self.repository.retrieve(process.market, process.name)
+        stored_process = self.repository.retrieve(process.name, process.market)
         self.assertEqual(process, stored_process)
 
     def test_should_store_multiple_processes_and_retrieve_all(self):

@@ -36,7 +36,7 @@ class ProcessRepository:
         serialized = serialize_process(process)
         self.cache.store(key, serialized)
 
-    def retrieve(self, market, process_name) -> Process:
+    def retrieve(self, process_name, market) -> Process:
         key = self.build_process_key(market, process_name)
         return self.__retrieve(key)
 
