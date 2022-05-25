@@ -7,6 +7,7 @@ from processrepo.ProcessRunProfile import RunProfile
 class ProcessStatus(Enum):
     INITIALIZED = 'initialized'
     RUNNING = 'running'
+    IDLE = 'idle'
     ERROR = 'error'
     STOPPED = 'stopped'
     UNKNOWN = 'unknown'
