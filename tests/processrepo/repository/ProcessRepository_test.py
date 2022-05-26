@@ -24,14 +24,14 @@ class ProcessRepositoryTestCase(unittest.TestCase):
         self.cache.delete('test:process:status:b')
 
     def test_should_store_and_retrieve_process(self):
-        process = Process('test', 'conductor', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
+        process = Process('test', 'conductor', '0.0.1', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
         self.repository.store(process)
         stored_process = self.repository.retrieve(process.name, process.market)
         self.assertEqual(process, stored_process)
 
     def test_should_store_multiple_processes_and_retrieve_all(self):
-        process_a = Process('test', 'a', 1, RunProfile.ASAP, ProcessStatus.RUNNING)
-        process_b = Process('test', 'b', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
+        process_a = Process('test', 'a', '0.0.1', 1, RunProfile.ASAP, ProcessStatus.RUNNING)
+        process_b = Process('test', 'b', '1.1.0', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
         self.repository.store(process_a)
         self.repository.store(process_b)
         stored_processes = self.repository.retrieve_all('test')

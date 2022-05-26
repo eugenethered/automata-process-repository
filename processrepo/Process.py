@@ -22,6 +22,7 @@ class ProcessStatus(Enum):
 class Process:
     market: str
     name: str
+    version: str
     instant: int
     run_profile: RunProfile = field(default=RunProfile.ASAP)
     status: ProcessStatus = field(default=ProcessStatus.UNKNOWN)
