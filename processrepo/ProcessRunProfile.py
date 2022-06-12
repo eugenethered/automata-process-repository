@@ -19,3 +19,4 @@ class ProcessRunProfile:
     market: str
     name: str
     run_profile: RunProfile = field(default=RunProfile.ASAP)
+    enabled: bool = False

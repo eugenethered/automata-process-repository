@@ -26,6 +26,12 @@ class ProcessRunProfileRepositoryTestCase(unittest.TestCase):
         stored_process_run_profile = self.repository.retrieve('conductor', 'test')
         self.assertEqual(process_run_profile, stored_process_run_profile)
 
+    def test_should_store_and_retrieve_enabled_process_run_profile(self):
+        process_run_profile = ProcessRunProfile('test', 'conductor', RunProfile.MINUTE, True)
+        self.repository.store(process_run_profile)
+        stored_process_run_profile = self.repository.retrieve('conductor', 'test')
+        self.assertEqual(process_run_profile, stored_process_run_profile)
+
 
 if __name__ == '__main__':
     unittest.main()
