@@ -10,7 +10,7 @@ class ProcessStatus(Enum):
     IDLE = 'idle'
     ERROR = 'error'
     STOPPED = 'stopped'
-    ENABLED = 'enabled'
+    DISABLED = 'disabled'
     UNKNOWN = 'unknown'
 
     @staticmethod
