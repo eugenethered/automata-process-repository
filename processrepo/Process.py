@@ -4,7 +4,7 @@ from enum import Enum
 from processrepo.ProcessRunProfile import RunProfile
 
 
-class ProcessStatus(Enum):
+class ProcessStatus(str, Enum):
     INITIALIZED = 'initialized'
     RUNNING = 'running'
     IDLE = 'idle'

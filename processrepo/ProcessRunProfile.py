@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 
-class RunProfile(Enum):
+class RunProfile(str, Enum):
     ASAP = 'asap'
     MINUTE = 'minute'
     HOUR = 'hour'
