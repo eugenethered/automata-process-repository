@@ -13,7 +13,7 @@ PROCESS_RUN_PROFILE_KEY = 'PROCESS_RUN_PROFILE_KEY'
 class ProcessRunProfileRepository:
 
     def __init__(self, options):
-        self.log = logging.getLogger(__name__)
+        self.log = logging.getLogger('ProcessRunProfileRepository')
         self.options = options
         self.__check_options()
         self.process_run_profile_key = self.options[PROCESS_RUN_PROFILE_KEY]

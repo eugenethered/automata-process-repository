@@ -14,7 +14,7 @@ PROCESS_KEY = 'PROCESS_KEY'
 class ProcessRepository:
 
     def __init__(self, options):
-        self.log = logging.getLogger(__name__)
+        self.log = logging.getLogger('ProcessRepository')
         self.options = options
         self.__check_options()
         self.process_key = self.options[PROCESS_KEY]
