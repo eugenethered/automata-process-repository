@@ -1,6 +1,7 @@
 import logging
 
 from cache.holder.RedisCacheHolder import RedisCacheHolder
+from cache.provider.RedisCacheProviderWithHash import RedisCacheProviderWithHash
 from core.options.exception.MissingOptionError import MissingOptionError
 
 from processrepo.ProcessRunProfile import ProcessRunProfile
@@ -17,7 +18,7 @@ class ProcessRunProfileRepository:
         self.options = options
         self.__check_options()
         self.process_run_profile_key = self.options[PROCESS_RUN_PROFILE_KEY]
-        self.cache = RedisCacheHolder()
+        self.cache = RedisCacheHolder(held_type=RedisCacheProviderWithHash)
 
     def __check_options(self):
         if self.options is None:
@@ -27,15 +28,18 @@ class ProcessRunProfileRepository:
             self.log.warning(f'missing option please provide option {PROCESS_RUN_PROFILE_KEY}')
             raise MissingOptionError(f'missing option please provide option {PROCESS_RUN_PROFILE_KEY}')
 
-    def build_process_run_profile_key(self, process_name, market):
-        return self.process_run_profile_key.format(market, process_name)
+    def store_key(self):
+        return self.options[PROCESS_RUN_PROFILE_KEY]
+
+    @staticmethod
+    def value_key(process_run_profile):
+        return f'{process_run_profile["market"]}-{process_run_profile["name"]}'
 
     def store(self, process_run_profile: ProcessRunProfile):
-        key = self.build_process_run_profile_key(process_run_profile.name, process_run_profile.market)
-        serialized = serialize_process_run_profile(process_run_profile)
-        self.cache.store(key, serialized)
+        serialized_entity = serialize_process_run_profile(process_run_profile)
+        self.cache.values_set_value(self.store_key(), self.value_key(serialized_entity), serialized_entity)
 
     def retrieve(self, process_name, market) -> ProcessRunProfile:
-        key = self.build_process_run_profile_key(process_name, market)
-        raw_run_profile = self.cache.fetch(key, as_type=dict)
-        return deserialize_process_run_profile(raw_run_profile, market, process_name)
+        serialized_for_get = {"market": market, "name": process_name}
+        serialized_entity = self.cache.values_get_value(self.store_key(), self.value_key(serialized_for_get))
+        return deserialize_process_run_profile(serialized_entity, market, process_name)
