@@ -1,6 +1,7 @@
 import unittest
 
 from cache.holder.RedisCacheHolder import RedisCacheHolder
+from cache.provider.RedisCacheProviderWithHash import RedisCacheProviderWithHash
 
 from processrepo.Process import Process, ProcessStatus
 from processrepo.ProcessRunProfile import RunProfile
@@ -11,17 +12,15 @@ class ProcessRepositoryTestCase(unittest.TestCase):
 
     def setUp(self):
         options = {
-            'REDIS_SERVER_ADDRESS': '192.168.1.90',
+            'REDIS_SERVER_ADDRESS': '10.104.71.60',
             'REDIS_SERVER_PORT': 6379,
-            'PROCESS_KEY': '{}:process:status:{}'
+            'PROCESS_KEY': 'test:process:mv:status'
         }
-        self.cache = RedisCacheHolder(options)
+        self.cache = RedisCacheHolder(options, held_type=RedisCacheProviderWithHash)
         self.repository = ProcessRepository(options)
 
     def tearDown(self):
-        self.cache.delete('test:process:status:conductor')
-        self.cache.delete('test:process:status:a')
-        self.cache.delete('test:process:status:b')
+        self.cache.delete('test:process:mv:status')
 
     def test_should_store_and_retrieve_process(self):
         process = Process('test', 'conductor', '0.0.1', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
@@ -34,8 +33,8 @@ class ProcessRepositoryTestCase(unittest.TestCase):
         process_b = Process('test', 'b', '1.1.0', 1, RunProfile.MINUTE, ProcessStatus.RUNNING)
         self.repository.store(process_a)
         self.repository.store(process_b)
-        stored_processes = self.repository.retrieve_all('test')
-        self.assertEqual([process_a, process_b], stored_processes)
+        stored_processes = self.repository.retrieve_all()
+        self.assertEqual([process_b, process_a], stored_processes)
 
 
 if __name__ == '__main__':
